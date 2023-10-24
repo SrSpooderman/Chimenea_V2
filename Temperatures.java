@@ -35,7 +35,7 @@ public class Temperatures {
                                 Temperatures[w-1][h]*1.2D+
                                 Temperatures[w][h+1]*0.7D+
                                 Temperatures[w+1][h+1]*0.7D+
-                                Temperatures[w-1][h+1]*0.7D)/5.98569D-.2D;
+                                Temperatures[w-1][h+1]*0.7D)/5.98569D-1.8D;
                 Temperatures[w][h] = (int) newTemp;
 
                 if (Temperatures[w][h] <0){

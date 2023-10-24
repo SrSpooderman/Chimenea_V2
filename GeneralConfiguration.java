@@ -4,11 +4,11 @@ import java.awt.*;
 import java.text.NumberFormat;
 
 public class GeneralConfiguration {
-    JFormattedTextField fireWidth;
-    JFormattedTextField fireHeight;
-    JFormattedTextField fireXPosition;
-    JFormattedTextField fireYPosition;
-    Image backgroundImage;
+    private JFormattedTextField fireWidth;
+    private JFormattedTextField fireHeight;
+    private JFormattedTextField fireXPosition;
+    private JFormattedTextField fireYPosition;
+    private Image backgroundImage;
 
     public GeneralConfiguration() {
         NumberFormat format = NumberFormat.getIntegerInstance();
@@ -19,7 +19,6 @@ public class GeneralConfiguration {
         NumberFormat formata = NumberFormat.getIntegerInstance();
         NumberFormatter formattera = new NumberFormatter(formata);
         formattera.setValueClass(Integer.class);
-        formattera.setMinimum(0);
 
 
         fireWidth = new JFormattedTextField(formatter);
@@ -35,7 +34,7 @@ public class GeneralConfiguration {
         fireYPosition.setName("PosicionYTextField");
     }
 
-    public JTextField getFireWidth() {
+    public JFormattedTextField getFireWidth() {
         return fireWidth;
     }
 
@@ -43,7 +42,7 @@ public class GeneralConfiguration {
         this.fireWidth = fireWidth;
     }
 
-    public JTextField getFireHight() {
+    public JFormattedTextField getFireHeight() {
         return fireHeight;
     }
 
@@ -51,7 +50,7 @@ public class GeneralConfiguration {
         this.fireHeight = fireHight;
     }
 
-    public JTextField getFireXPosition() {
+    public JFormattedTextField getFireXPosition() {
         return fireXPosition;
     }
 
@@ -59,7 +58,7 @@ public class GeneralConfiguration {
         this.fireXPosition = fireXPosition;
     }
 
-    public JTextField getFireYPosition() {
+    public JFormattedTextField getFireYPosition() {
         return fireYPosition;
     }
 

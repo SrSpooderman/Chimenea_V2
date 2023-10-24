@@ -13,7 +13,7 @@ public class FireModel extends BufferedImage {
         super(width, height, BufferedImage.TYPE_INT_ARGB);
         this.width = width;
         this.height = height;
-        this.temperatures = new Temperatures(width, height, 0.09F, 0.055F);
+        this.temperatures = new Temperatures(width, height, 0.09F, 0.03F);
         this.palette = new ColorPalette();
 
         palette.addColorTarget(new ColorTarget(255,new Color(255,255,255,255)));

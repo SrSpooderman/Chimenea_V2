@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.text.NumberFormatter;
+import java.text.NumberFormat;
 
 public class FireView extends JFrame implements ItemListener, ActionListener, ComponentListener {
     private ControlPanel ControlPanel;
@@ -72,28 +74,28 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         panel.add(label, c);
 
         c.gridy = 3;
-        panel.add(this.ControlPanel.getGeneralConfiguration().fireHeight, c);
+        panel.add(this.ControlPanel.getGeneralConfiguration().getFireHeight(), c);
 
         c.gridy = 4;
         label = new JLabel("Fire Width:");
         panel.add(label, c);
 
         c.gridy = 5;
-        panel.add(this.ControlPanel.getGeneralConfiguration().fireWidth, c);
+        panel.add(this.ControlPanel.getGeneralConfiguration().getFireWidth(), c);
 
         c.gridy = 6;
         label = new JLabel("Fire X Position:");
         panel.add(label, c);
 
         c.gridy = 7;
-        panel.add(this.ControlPanel.getGeneralConfiguration().fireXPosition, c);
+        panel.add(this.ControlPanel.getGeneralConfiguration().getFireXPosition(), c);
 
         c.gridy = 8;
         label = new JLabel("Fire Y Position:");
         panel.add(label, c);
 
         c.gridy = 9;
-        panel.add(this.ControlPanel.getGeneralConfiguration().fireYPosition, c);
+        panel.add(this.ControlPanel.getGeneralConfiguration().getFireYPosition(), c);
 
         c.gridy = 10;
         this.ControlPanel.getAnimationControls().setApply(new JButton("Apply"));
@@ -120,6 +122,13 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         Viewer = viewer;
     }
 
+    private void defaultTextValues(){
+        this.ControlPanel.getGeneralConfiguration().getFireHeight().setValue(this.Viewer.getForegroundImg().getHeight());
+        this.ControlPanel.getGeneralConfiguration().getFireWidth().setValue(this.Viewer.getForegroundImg().getWidth());
+        this.ControlPanel.getGeneralConfiguration().getFireXPosition().setValue(this.Viewer.getPosx());
+        this.ControlPanel.getGeneralConfiguration().getFireYPosition().setValue(this.Viewer.getPosy());
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String str = e.getActionCommand();
@@ -127,6 +136,7 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
             case "Play":
                 this.Viewer.paintForeground();
                 this.Viewer.paintBackground();
+                defaultTextValues();
                 break;
             case "Stop":
                 this.ControlPanel.getAnimationControls().getPlayPause().setSelected(false);
@@ -134,10 +144,10 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
                 break;
             case "Apply":
                 this.Viewer.getForegroundImg().setTransparent();
-                FireModel fire = new FireModel((int)this.ControlPanel.getGeneralConfiguration().fireWidth.getValue(),(int)this.ControlPanel.getGeneralConfiguration().fireHeight.getValue());
+                FireModel fire = new FireModel((int)this.ControlPanel.getGeneralConfiguration().getFireWidth().getValue(),(int)this.ControlPanel.getGeneralConfiguration().getFireHeight().getValue());
                 this.Viewer.setForegroundImg(fire);
-                this.Viewer.setPosx((int)this.ControlPanel.getGeneralConfiguration().fireXPosition.getValue());
-                this.Viewer.setPosy((int)this.ControlPanel.getGeneralConfiguration().fireYPosition.getValue());
+                this.Viewer.setPosx((int)this.ControlPanel.getGeneralConfiguration().getFireXPosition().getValue());
+                this.Viewer.setPosy((int)this.ControlPanel.getGeneralConfiguration().getFireYPosition().getValue());
                 this.Viewer.paintForeground();
                 break;
             default:
