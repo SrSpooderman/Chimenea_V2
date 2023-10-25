@@ -2,15 +2,20 @@ import static java.lang.Thread.sleep;
 
 public class FireController {
     private FireView FireView;
-    private FireModel FireModel;
+    private DTOGeneralParameters DTOGeneralParameters;
 
     public FireController() {
+        DTOGeneralParameters = new DTOGeneralParameters(
+                430,
+                200,
+                420,
+                475);
+        DTOGeneralParameters.setFireModel(new FireModel(DTOGeneralParameters.getFireWidth(), DTOGeneralParameters.getFireHeight()));
         initClass();
     }
 
     private void initClass(){
-        this.FireModel = new FireModel(200,200);
-        this.FireView = new FireView(new Viewer(1000,1000,FireModel));
+        this.FireView = new FireView(this.DTOGeneralParameters);
     }
 
     public void main(){
@@ -25,7 +30,7 @@ public class FireController {
                 this.FireView.getViewer().paintForeground();
             }
             try {
-                sleep(100);
+                sleep(20);
             }catch (InterruptedException e){
                 System.err.println(e);
             }

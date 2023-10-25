@@ -4,8 +4,6 @@ import java.awt.image.BufferedImage;
 public class FireModel extends BufferedImage {
     private int width;
     private int height;
-    private int posX;
-    private int posY;
     private Temperatures temperatures;
     private ColorPalette palette;
 

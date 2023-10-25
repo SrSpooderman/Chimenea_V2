@@ -1,16 +1,18 @@
 import javax.swing.*;
-import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.text.NumberFormatter;
-import java.text.NumberFormat;
 
 public class FireView extends JFrame implements ItemListener, ActionListener, ComponentListener {
+    private DTOGeneralParameters DTOGeneralParameters;
     private ControlPanel ControlPanel;
     private Viewer Viewer;
 
-    public FireView(Viewer Viewer) {
-        this.Viewer = Viewer;
+
+    public FireView(DTOGeneralParameters DTOGeneralParameters) {
+        this.DTOGeneralParameters = DTOGeneralParameters;
+
+        this.Viewer = new Viewer(DTOGeneralParameters);
+
         this.ControlPanel = new ControlPanel();
         this.configureJFrame();
         this.pack();
@@ -123,10 +125,10 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
     }
 
     private void defaultTextValues(){
-        this.ControlPanel.getGeneralConfiguration().getFireHeight().setValue(this.Viewer.getForegroundImg().getHeight());
-        this.ControlPanel.getGeneralConfiguration().getFireWidth().setValue(this.Viewer.getForegroundImg().getWidth());
-        this.ControlPanel.getGeneralConfiguration().getFireXPosition().setValue(this.Viewer.getPosx());
-        this.ControlPanel.getGeneralConfiguration().getFireYPosition().setValue(this.Viewer.getPosy());
+        this.ControlPanel.getGeneralConfiguration().getFireHeight().setValue(this.DTOGeneralParameters.getFireHeight());
+        this.ControlPanel.getGeneralConfiguration().getFireWidth().setValue(this.DTOGeneralParameters.getFireWidth());
+        this.ControlPanel.getGeneralConfiguration().getFireXPosition().setValue(this.DTOGeneralParameters.getFireXPosition());
+        this.ControlPanel.getGeneralConfiguration().getFireYPosition().setValue(this.DTOGeneralParameters.getFireYPosition());
     }
 
     @Override
@@ -134,20 +136,21 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         String str = e.getActionCommand();
         switch (str) {
             case "Play":
-                this.Viewer.paintForeground();
                 this.Viewer.paintBackground();
+                this.Viewer.showBg();
                 defaultTextValues();
                 break;
             case "Stop":
                 this.ControlPanel.getAnimationControls().getPlayPause().setSelected(false);
                 this.Viewer.paintBackground();
+                this.Viewer.showBg();
                 break;
             case "Apply":
-                this.Viewer.getForegroundImg().setTransparent();
-                FireModel fire = new FireModel((int)this.ControlPanel.getGeneralConfiguration().getFireWidth().getValue(),(int)this.ControlPanel.getGeneralConfiguration().getFireHeight().getValue());
-                this.Viewer.setForegroundImg(fire);
-                this.Viewer.setPosx((int)this.ControlPanel.getGeneralConfiguration().getFireXPosition().getValue());
-                this.Viewer.setPosy((int)this.ControlPanel.getGeneralConfiguration().getFireYPosition().getValue());
+                this.Viewer.getDTOGeneralParameters().setFireHeight((int)this.ControlPanel.getGeneralConfiguration().getFireHeight().getValue());
+                this.Viewer.getDTOGeneralParameters().setFireWidth((int)this.ControlPanel.getGeneralConfiguration().getFireWidth().getValue());
+                this.Viewer.getDTOGeneralParameters().setFireXPosition((int)this.ControlPanel.getGeneralConfiguration().getFireXPosition().getValue());
+                this.Viewer.getDTOGeneralParameters().setFireYPosition((int)this.ControlPanel.getGeneralConfiguration().getFireYPosition().getValue());
+
                 this.Viewer.paintForeground();
                 break;
             default:
