@@ -8,10 +8,10 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
     private Viewer Viewer;
 
 
-    public FireView(DTOGeneralParameters DTOGeneralParameters) {
+    public FireView(DTOGeneralParameters DTOGeneralParameters, FireModel FireModel) {
         this.DTOGeneralParameters = DTOGeneralParameters;
 
-        this.Viewer = new Viewer(DTOGeneralParameters);
+        this.Viewer = new Viewer(DTOGeneralParameters, FireModel);
 
         this.ControlPanel = new ControlPanel();
         this.configureJFrame();

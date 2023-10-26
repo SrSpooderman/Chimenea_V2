@@ -2,6 +2,7 @@ import static java.lang.Thread.sleep;
 
 public class FireController {
     private FireView FireView;
+    private FireModel FireModel;
     private DTOGeneralParameters DTOGeneralParameters;
 
     public FireController() {
@@ -10,12 +11,12 @@ public class FireController {
                 200,
                 420,
                 475);
-        DTOGeneralParameters.setFireModel(new FireModel(DTOGeneralParameters.getFireWidth(), DTOGeneralParameters.getFireHeight()));
+        FireModel = new FireModel(DTOGeneralParameters.getFireWidth(), DTOGeneralParameters.getFireHeight());
         initClass();
     }
 
     private void initClass(){
-        this.FireView = new FireView(this.DTOGeneralParameters);
+        this.FireView = new FireView(this.DTOGeneralParameters, FireModel);
     }
 
     public void main(){

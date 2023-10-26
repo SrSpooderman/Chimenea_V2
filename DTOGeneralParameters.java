@@ -43,12 +43,4 @@ public class DTOGeneralParameters {
     public void setFireYPosition(int fireYPosition) {
         this.fireYPosition = fireYPosition;
     }
-
-    public FireModel getFireModel() {
-        return fireModel;
-    }
-
-    public void setFireModel(FireModel fireModel) {
-        this.fireModel = fireModel;
-    }
 }
