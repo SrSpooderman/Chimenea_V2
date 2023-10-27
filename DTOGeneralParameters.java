@@ -1,15 +1,20 @@
+import java.awt.*;
+import java.io.File;
+
 public class DTOGeneralParameters {
     private int fireWidth;
     private int fireHeight;
     private int fireXPosition;
     private int fireYPosition;
+    private File backgroundImage;
 
 
-    public DTOGeneralParameters(int fireWidth, int fireHeight, int fireXPosition, int fireYPosition) {
+    public DTOGeneralParameters(int fireWidth, int fireHeight, int fireXPosition, int fireYPosition, File backgroundImage) {
         this.fireWidth = fireWidth;
         this.fireHeight = fireHeight;
         this.fireXPosition = fireXPosition;
         this.fireYPosition = fireYPosition;
+        this.backgroundImage = backgroundImage;
     }
 
     public int getFireWidth() {
@@ -42,5 +47,13 @@ public class DTOGeneralParameters {
 
     public void setFireYPosition(int fireYPosition) {
         this.fireYPosition = fireYPosition;
+    }
+
+    public File getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(File backgroundImage) {
+        this.backgroundImage = backgroundImage;
     }
 }

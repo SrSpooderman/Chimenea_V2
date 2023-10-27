@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 public class FireView extends JFrame implements ItemListener, ActionListener, ComponentListener {
     private DTOGeneralParameters DTOGeneralParameters;
@@ -26,18 +27,26 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
     }
 
     private void addUIComponents(){
+        this.ControlPanel.getAnimationControls().getApply().addActionListener(this);
+        this.ControlPanel.getAnimationControls().getPlayPause().addActionListener(this);
+        this.ControlPanel.getAnimationControls().getStopButton().addActionListener(this);
+        this.ControlPanel.getGeneralConfiguration().getBackgroundImage().addActionListener(this);
+
         Container panel;
         panel = this.getContentPane();
 
-        GridBagConstraints buttonLabelConstraints = new GridBagConstraints();
-        buttonLabelConstraints.anchor = GridBagConstraints.NORTHWEST;
-        buttonLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        buttonLabelConstraints.gridx = 0;
-        buttonLabelConstraints.gridy = 0;
-        buttonLabelConstraints.weightx = 0;
-        buttonLabelConstraints.weighty = 0;
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.NORTHWEST;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 0;
+        c.weighty = 0;
 
-        panel.add(createButtonLabelPanel(), buttonLabelConstraints);
+        panel.add(this.ControlPanel.getAnimationControls(), c);
+        c.gridy = 1;
+        panel.add(this.ControlPanel.getGeneralConfiguration(), c);
+
 
 
         GridBagConstraints viewerConstraints = new GridBagConstraints();
@@ -45,6 +54,7 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         viewerConstraints.fill = GridBagConstraints.BOTH;
         viewerConstraints.gridx = 1;
         viewerConstraints.gridy = 0;
+        viewerConstraints.gridheight = 3;
         viewerConstraints.weightx = 1;
         viewerConstraints.weighty = 1;
 
@@ -61,48 +71,12 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         c.weightx = 0;
         c.weighty = 0;
 
-        this.ControlPanel.getAnimationControls().setPlayPause(new JToggleButton("Play"));
-        this.ControlPanel.getAnimationControls().getPlayPause().addActionListener(this);
-        panel.add(this.ControlPanel.getAnimationControls().getPlayPause(), c);
-
+        panel.add(this.ControlPanel.getAnimationControls(), c);
 
         c.gridy = 1;
-        this.ControlPanel.getAnimationControls().setStopButton(new JButton("Stop"));
-        this.ControlPanel.getAnimationControls().getStopButton().addActionListener(this);
-        panel.add(this.ControlPanel.getAnimationControls().getStopButton(), c);
+        c.weighty = 1;
+        panel.add(this.ControlPanel.getGeneralConfiguration(),c);
 
-        c.gridy = 2;
-        JLabel label = new JLabel("Fire Height:");
-        panel.add(label, c);
-
-        c.gridy = 3;
-        panel.add(this.ControlPanel.getGeneralConfiguration().getFireHeight(), c);
-
-        c.gridy = 4;
-        label = new JLabel("Fire Width:");
-        panel.add(label, c);
-
-        c.gridy = 5;
-        panel.add(this.ControlPanel.getGeneralConfiguration().getFireWidth(), c);
-
-        c.gridy = 6;
-        label = new JLabel("Fire X Position:");
-        panel.add(label, c);
-
-        c.gridy = 7;
-        panel.add(this.ControlPanel.getGeneralConfiguration().getFireXPosition(), c);
-
-        c.gridy = 8;
-        label = new JLabel("Fire Y Position:");
-        panel.add(label, c);
-
-        c.gridy = 9;
-        panel.add(this.ControlPanel.getGeneralConfiguration().getFireYPosition(), c);
-
-        c.gridy = 10;
-        this.ControlPanel.getAnimationControls().setApply(new JButton("Apply"));
-        this.ControlPanel.getAnimationControls().getApply().addActionListener(this);
-        panel.add(this.ControlPanel.getAnimationControls().getApply(), c);
 
         return panel;
     }
@@ -129,6 +103,10 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         this.ControlPanel.getGeneralConfiguration().getFireWidth().setValue(this.DTOGeneralParameters.getFireWidth());
         this.ControlPanel.getGeneralConfiguration().getFireXPosition().setValue(this.DTOGeneralParameters.getFireXPosition());
         this.ControlPanel.getGeneralConfiguration().getFireYPosition().setValue(this.DTOGeneralParameters.getFireYPosition());
+        this.ControlPanel.getGeneralConfiguration().getBackgroundInfo().setText(this.Viewer.getDTOGeneralParameters().getBackgroundImage().getName()+"\n"+
+                                                                                this.Viewer.getDTOGeneralParameters().getBackgroundImage().getParentFile().getName()+"\n"+
+                                                                                this.Viewer.getBackgroundImg().getHeight()+
+                                                                                "x"+this.Viewer.getBackgroundImg().getWidth());
     }
 
     @Override
@@ -146,12 +124,36 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
                 this.Viewer.showBg();
                 break;
             case "Apply":
-                this.Viewer.getDTOGeneralParameters().setFireHeight((int)this.ControlPanel.getGeneralConfiguration().getFireHeight().getValue());
-                this.Viewer.getDTOGeneralParameters().setFireWidth((int)this.ControlPanel.getGeneralConfiguration().getFireWidth().getValue());
-                this.Viewer.getDTOGeneralParameters().setFireXPosition((int)this.ControlPanel.getGeneralConfiguration().getFireXPosition().getValue());
-                this.Viewer.getDTOGeneralParameters().setFireYPosition((int)this.ControlPanel.getGeneralConfiguration().getFireYPosition().getValue());
-
+                this.Viewer.getDTOGeneralParameters().setFireHeight((int) this.ControlPanel.getGeneralConfiguration().getFireHeight().getValue());
+                this.Viewer.getDTOGeneralParameters().setFireWidth((int) this.ControlPanel.getGeneralConfiguration().getFireWidth().getValue());
+                this.Viewer.getDTOGeneralParameters().setFireXPosition((int) this.ControlPanel.getGeneralConfiguration().getFireXPosition().getValue());
+                this.Viewer.getDTOGeneralParameters().setFireYPosition((int) this.ControlPanel.getGeneralConfiguration().getFireYPosition().getValue());
+                defaultTextValues();
                 this.Viewer.paintForeground();
+                break;
+            case "Selecciona Imagen":
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+                    public boolean accept(File file) {
+                        return file.getName().toLowerCase().endsWith(".jpg")
+                                || file.getName().toLowerCase().endsWith(".jpeg")
+                                || file.getName().toLowerCase().endsWith(".png")
+                                || file.isDirectory();
+                    }
+
+                    public String getDescription() {
+                        return "Archivos de Imagen (*.jpg, *.jpeg, *.png)";
+                    }
+                });
+
+                int result = fileChooser.showOpenDialog(null);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+
+                    this.Viewer.getDTOGeneralParameters().setBackgroundImage(selectedFile);
+                }
+                this.Viewer.paintBackground();
+                defaultTextValues();
                 break;
             default:
             System.err.println("Acción NO tratada: " + e);

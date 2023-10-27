@@ -1,12 +1,31 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
-public class AnimationControls {
+public class AnimationControls extends JPanel{
     private JToggleButton playPause;
     private JButton apply;
     private JButton stopButton;
 
-    public AnimationControls() {
+    public AnimationControls(){
+        this.playPause = new JToggleButton("Play");
+        this.stopButton = new JButton("Stop");
+        this.apply = new JButton("Apply");
+        setLayout(new GridBagLayout());
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.NORTHWEST;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 0;
+        c.weighty = 0;
+
+        this.add(getPlayPause(), c);
+        c.gridy = 1;
+        this.add(getStopButton(), c);
+        c.gridy = 2;
+        this.add(getApply(), c);
     }
 
     public JToggleButton getPlayPause() {

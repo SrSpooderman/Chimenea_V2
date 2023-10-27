@@ -1,3 +1,5 @@
+import java.io.File;
+
 import static java.lang.Thread.sleep;
 
 public class FireController {
@@ -10,7 +12,8 @@ public class FireController {
                 430,
                 200,
                 420,
-                475);
+                475,
+                new File("C:/Users/pfran/Pictures/unnamed.jpg"));
         FireModel = new FireModel(DTOGeneralParameters.getFireWidth(), DTOGeneralParameters.getFireHeight());
         initClass();
     }

@@ -13,15 +13,16 @@ public class Viewer extends Canvas {
     public Viewer(DTOGeneralParameters DTOGeneralParameters, FireModel FireModel) {
         Dimension d = new Dimension(1000, 1000);
         this.setPreferredSize(d);
-        this.loadBackground();
 
         this.DTOGeneralParameters = DTOGeneralParameters;
-
+        this.loadBackground();
         this.foregroundImg = FireModel;
         this.bs = null;
     }
 
     public void paintBackground(){
+        this.loadBackground();
+
         if (this.bs == null){
             this.createBufferStrategy(2);
             bs = this.getBufferStrategy();
@@ -55,7 +56,7 @@ public class Viewer extends Canvas {
 
     private void loadBackground(){
         try{
-            this.backgroundImg = ImageIO.read(new File("C:/Users/pfran/Pictures/unnamed.jpg"));
+            this.backgroundImg = ImageIO.read(this.DTOGeneralParameters.getBackgroundImage());
         }catch (Exception e){
             System.err.println(e);
         }
