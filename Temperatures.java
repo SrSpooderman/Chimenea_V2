@@ -4,15 +4,14 @@ public class Temperatures {
     private int width;
     private int height;
     private int [][]Temperatures;
-    private float coldPointsPercentatge;
-    private float sparkPercentatge;
+    private DTOTemperatureParameters DTOTemperatureParameters;
 
-    public Temperatures(int width, int height, float coldPointsPercentatge, float sparkPercentatge) {
+    public Temperatures(DTOTemperatureParameters DTOTemperatureParameters ,int width, int height) {
+        this.DTOTemperatureParameters = DTOTemperatureParameters;
         this.width = width;
         this.height = height;
-        this.coldPointsPercentatge = coldPointsPercentatge;
-        this.sparkPercentatge = sparkPercentatge;
         this.Temperatures = new int[width][height];
+        this.DTOTemperatureParameters = DTOTemperatureParameters;
     }
 
     public int getTemp(int x,int y){
@@ -22,20 +21,50 @@ public class Temperatures {
     public void next(){
         createColdPoints();
         createSparks();
-        calcTemperatures();
+        if (this.DTOTemperatureParameters.isBottomUpTemps()){
+            uptodown();
+        } else {
+            downtoup();
+        }
     }
 
-    public void calcTemperatures(){
+    public void uptodown(){
         for (int h=height-2;h>4;h--){
             for (int w=2;w<width-2;w++){
                 double newTemp;
                 newTemp =(
-                        Temperatures[w][h]*1.5D+
-                                Temperatures[w+1][h]*1.2D+
-                                Temperatures[w-1][h]*1.2D+
-                                Temperatures[w][h+1]*0.7D+
-                                Temperatures[w+1][h+1]*0.7D+
-                                Temperatures[w-1][h+1]*0.7D)/5.98569D-1.8D;
+                        Temperatures[w][h]*this.DTOTemperatureParameters.getCellPonderation()[1]+
+                                Temperatures[w+1][h]*this.DTOTemperatureParameters.getCellPonderation()[0]+
+                                Temperatures[w-1][h]*this.DTOTemperatureParameters.getCellPonderation()[2]+
+                                Temperatures[w][h+1]*this.DTOTemperatureParameters.getCellPonderation()[3]+
+                                Temperatures[w+1][h+1]*this.DTOTemperatureParameters.getCellPonderation()[4]+
+                                Temperatures[w-1][h+1]*this.DTOTemperatureParameters.getCellPonderation()[5])/
+                                this.DTOTemperatureParameters.getCellsDivider()-
+                                this.DTOTemperatureParameters.getAtenuationFactor();
+                Temperatures[w][h] = (int) newTemp;
+
+                if (Temperatures[w][h] <0){
+                    Temperatures[w][h]=0;
+                } else if (Temperatures[w][h]>255) {
+                    Temperatures[w][h]=255;
+                }
+            }
+        }
+    }
+
+    public void downtoup(){
+        for (int h = 5; h < height - 1; h++){
+            for (int w=2;w<width-2;w++){
+                double newTemp;
+                newTemp =(
+                        Temperatures[w][h]*this.DTOTemperatureParameters.getCellPonderation()[1]+
+                                Temperatures[w+1][h]*this.DTOTemperatureParameters.getCellPonderation()[0]+
+                                Temperatures[w-1][h]*this.DTOTemperatureParameters.getCellPonderation()[2]+
+                                Temperatures[w][h+1]*this.DTOTemperatureParameters.getCellPonderation()[3]+
+                                Temperatures[w+1][h+1]*this.DTOTemperatureParameters.getCellPonderation()[4]+
+                                Temperatures[w-1][h+1]*this.DTOTemperatureParameters.getCellPonderation()[5])/
+                        this.DTOTemperatureParameters.getCellsDivider()-
+                        this.DTOTemperatureParameters.getAtenuationFactor();
                 Temperatures[w][h] = (int) newTemp;
 
                 if (Temperatures[w][h] <0){
@@ -52,7 +81,7 @@ public class Temperatures {
 
         for (int w=0;w<width;w++){
             float randomNumber = rd.nextFloat();
-            if (randomNumber < coldPointsPercentatge){
+            if (randomNumber < (float) this.DTOTemperatureParameters.getCoolPixelPercentage()/100F){
                 Temperatures[w][height-1] = 0;
             }
         }
@@ -63,7 +92,7 @@ public class Temperatures {
 
         for (int w=0;w<width;w++){
             float randomNumber = rd.nextFloat();
-            if (randomNumber < coldPointsPercentatge){
+            if (randomNumber < (float) this.DTOTemperatureParameters.getHotPixelPercentage()/100F){
                 Temperatures[w][height-1] = 255;
             }
         }
@@ -101,19 +130,11 @@ public class Temperatures {
         Temperatures = temperatures;
     }
 
-    public float getColdPointsPercentatge() {
-        return coldPointsPercentatge;
+    public DTOTemperatureParameters getDTOTemperatureParameters() {
+        return DTOTemperatureParameters;
     }
 
-    public void setColdPointsPercentatge(float coldPointsPercentatge) {
-        this.coldPointsPercentatge = coldPointsPercentatge;
-    }
-
-    public float getSparkPercentatge() {
-        return sparkPercentatge;
-    }
-
-    public void setSparkPercentatge(float sparkPercentatge) {
-        this.sparkPercentatge = sparkPercentatge;
+    public void setDTOTemperatureParameters(DTOTemperatureParameters DTOTemperatureParameters) {
+        this.DTOTemperatureParameters = DTOTemperatureParameters;
     }
 }

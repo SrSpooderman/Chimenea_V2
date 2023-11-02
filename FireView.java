@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -46,6 +48,8 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         panel.add(this.ControlPanel.getAnimationControls(), c);
         c.gridy = 1;
         panel.add(this.ControlPanel.getGeneralConfiguration(), c);
+        c.gridy = 2;
+        panel.add(this.ControlPanel.getTemperatureConfiguration(),c);
 
 
 
@@ -59,6 +63,27 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         viewerConstraints.weighty = 1;
 
         panel.add(this.Viewer, viewerConstraints);
+
+        //
+        this.ControlPanel.getTemperatureConfiguration().getCoolPixelsPercentage().addChangeListener(
+                new ChangeListener() {
+                    @Override
+                    public void stateChanged(ChangeEvent e) {
+                        ControlPanel.getTemperatureConfiguration().setCoolPixelLabel("CoolPixel: "+
+                                ControlPanel.getTemperatureConfiguration().getCoolPixelsPercentage().getValue());
+                    }
+                }
+        );
+
+        this.ControlPanel.getTemperatureConfiguration().getHotPixelsPercentage().addChangeListener(
+                new ChangeListener() {
+                    @Override
+                    public void stateChanged(ChangeEvent e) {
+                        ControlPanel.getTemperatureConfiguration().setHotPixelLabel("HotPixel: "+
+                                ControlPanel.getTemperatureConfiguration().getHotPixelsPercentage().getValue());
+                    }
+                }
+        );
     }
 
     private JPanel createButtonLabelPanel(){
@@ -107,6 +132,15 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
                                                                                 this.Viewer.getDTOGeneralParameters().getBackgroundImage().getParentFile().getName()+"\n"+
                                                                                 this.Viewer.getBackgroundImg().getHeight()+
                                                                                 "x"+this.Viewer.getBackgroundImg().getWidth());
+
+        this.ControlPanel.getTemperatureConfiguration().getCoolPixelLabel().setText("CoolPixel: "+
+                ControlPanel.getTemperatureConfiguration().getCoolPixelsPercentage().getValue());
+        this.ControlPanel.getTemperatureConfiguration().getCoolPixelsPercentage().setValue(this.Viewer.getForegroundImg().getTemperatures().getDTOTemperatureParameters().getCoolPixelPercentage());
+        this.ControlPanel.getTemperatureConfiguration().getHotPixelLabel().setText("HotPixel: "+
+                ControlPanel.getTemperatureConfiguration().getHotPixelsPercentage().getValue());
+        this.ControlPanel.getTemperatureConfiguration().getHotPixelsPercentage().setValue(this.Viewer.getForegroundImg().getTemperatures().getDTOTemperatureParameters().getHotPixelPercentage());
+        this.ControlPanel.getTemperatureConfiguration().getCellsDivider().setValue(this.Viewer.getForegroundImg().getTemperatures().getDTOTemperatureParameters().getCellsDivider());
+        this.ControlPanel.getTemperatureConfiguration().getFixAtenuationFactor().setValue(this.Viewer.getForegroundImg().getTemperatures().getDTOTemperatureParameters().getAtenuationFactor());
     }
 
     @Override
@@ -120,15 +154,28 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
                 break;
             case "Stop":
                 this.ControlPanel.getAnimationControls().getPlayPause().setSelected(false);
-                this.Viewer.paintBackground();
-                this.Viewer.showBg();
                 break;
             case "Apply":
                 this.Viewer.getDTOGeneralParameters().setFireHeight((int) this.ControlPanel.getGeneralConfiguration().getFireHeight().getValue());
                 this.Viewer.getDTOGeneralParameters().setFireWidth((int) this.ControlPanel.getGeneralConfiguration().getFireWidth().getValue());
                 this.Viewer.getDTOGeneralParameters().setFireXPosition((int) this.ControlPanel.getGeneralConfiguration().getFireXPosition().getValue());
                 this.Viewer.getDTOGeneralParameters().setFireYPosition((int) this.ControlPanel.getGeneralConfiguration().getFireYPosition().getValue());
+
+                DTOTemperatureParameters DTO = new DTOTemperatureParameters(
+                        this.ControlPanel.getTemperatureConfiguration().getCoolPixelsPercentage().getValue(),
+                        this.ControlPanel.getTemperatureConfiguration().getHotPixelsPercentage().getValue(),
+                        new double[] {1.2D,1.5D,1.2D,0.7D,0.7D,0.7D},
+                        (double) this.ControlPanel.getTemperatureConfiguration().getCellsDivider().getValue(),
+                        (double) this.ControlPanel.getTemperatureConfiguration().getFixAtenuationFactor().getValue(),
+                        this.ControlPanel.getTemperatureConfiguration().getBottonUpTemps().isSelected());
+
+
+                this.Viewer.setForegroundImg(new FireModel(DTO,
+                        (int) this.ControlPanel.getGeneralConfiguration().getFireWidth().getValue(),
+                        (int) this.ControlPanel.getGeneralConfiguration().getFireHeight().getValue()));
+
                 defaultTextValues();
+                this.Viewer.paintBackground();
                 this.Viewer.paintForeground();
                 break;
             case "Selecciona Imagen":
@@ -151,9 +198,9 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
                     File selectedFile = fileChooser.getSelectedFile();
 
                     this.Viewer.getDTOGeneralParameters().setBackgroundImage(selectedFile);
+                    defaultTextValues();
                 }
                 this.Viewer.paintBackground();
-                defaultTextValues();
                 break;
             default:
             System.err.println("Acción NO tratada: " + e);

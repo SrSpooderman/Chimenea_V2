@@ -7,11 +7,11 @@ public class FireModel extends BufferedImage {
     private Temperatures temperatures;
     private ColorPalette palette;
 
-    public FireModel(int width, int height) {
+    public FireModel(DTOTemperatureParameters DTOTemperatureParameters,int width, int height) {
         super(width, height, BufferedImage.TYPE_INT_ARGB);
         this.width = width;
         this.height = height;
-        this.temperatures = new Temperatures(width, height, 0.09F, 0.03F);
+        this.temperatures = new Temperatures(DTOTemperatureParameters,width, height);
         this.palette = new ColorPalette();
 
         palette.addColorTarget(new ColorTarget(255,new Color(255,255,255,255)));

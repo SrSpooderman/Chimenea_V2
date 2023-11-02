@@ -1,7 +1,6 @@
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.io.File;
 import java.text.NumberFormat;
 
 public class GeneralConfiguration extends JPanel {
@@ -38,6 +37,7 @@ public class GeneralConfiguration extends JPanel {
         fireYPosition.setName("PosicionYTextField");
 
         backgroundInfo = new JTextArea("");
+        backgroundInfo.setEditable(false);
 
         setLayout(new GridBagLayout());
 

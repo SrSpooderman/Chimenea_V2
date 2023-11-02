@@ -8,3 +8,4 @@ Aplicando el patron de diseño DTO
 - Clase TemperatureConfigurations - Hijos de JPanel
 - Crear un nuevo firemodel cada vez que cambie altura y ancho del fuego
 - Hacer la interfaz mas bonita
+- TemperatureConfigurations

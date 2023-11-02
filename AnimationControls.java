@@ -21,11 +21,11 @@ public class AnimationControls extends JPanel{
         c.weightx = 0;
         c.weighty = 0;
 
-        this.add(getPlayPause(), c);
+        this.add(this.playPause, c);
         c.gridy = 1;
-        this.add(getStopButton(), c);
+        this.add(this.stopButton, c);
         c.gridy = 2;
-        this.add(getApply(), c);
+        this.add(this.apply, c);
     }
 
     public JToggleButton getPlayPause() {

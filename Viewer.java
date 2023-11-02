@@ -11,7 +11,7 @@ public class Viewer extends Canvas {
     private FireModel foregroundImg;
 
     public Viewer(DTOGeneralParameters DTOGeneralParameters, FireModel FireModel) {
-        Dimension d = new Dimension(1000, 1000);
+        Dimension d = new Dimension(500, 500);
         this.setPreferredSize(d);
 
         this.DTOGeneralParameters = DTOGeneralParameters;
@@ -76,5 +76,13 @@ public class Viewer extends Canvas {
 
     public void setDTOGeneralParameters(DTOGeneralParameters DTOGeneralParameters) {
         this.DTOGeneralParameters = DTOGeneralParameters;
+    }
+
+    public FireModel getForegroundImg() {
+        return foregroundImg;
+    }
+
+    public void setForegroundImg(FireModel foregroundImg) {
+        this.foregroundImg = foregroundImg;
     }
 }
