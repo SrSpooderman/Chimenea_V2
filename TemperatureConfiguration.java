@@ -1,9 +1,12 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class TemperatureConfiguration extends JPanel {
     private JSlider coolPixelsPercentage;
@@ -30,9 +33,19 @@ public class TemperatureConfiguration extends JPanel {
         this.fixAtenuationFactor = new JFormattedTextField(formatter);
         this.bottonUpTemps = new JToggleButton("Arriba/abajo");
 
-        DefaultTableModel model = new DefaultTableModel();
+        Object[][] data = {
+                {1.1, 2.2},
+                {3.3, 4.4},
+                {5.5, 6.6}
+        };
+        DefaultTableModel model = new DefaultTableModel(data, 2) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return Double.class; // Establecer el tipo de datos de las columnas como Double
+            }
+        };
+        this.cellsPonderation = new JTable(model);
 
-        this.cellsPonderation = new JTable();
 
         setLayout(new GridBagLayout());
 
@@ -61,6 +74,10 @@ public class TemperatureConfiguration extends JPanel {
         this.add(this.fixAtenuationFactor,c);
         c.gridy =8;
         this.add(this.bottonUpTemps,c);
+        c.gridy =9;
+        this.add(new JLabel("Cells Poderation"),c);
+        c.gridy = 10;
+        this.add(this.cellsPonderation,c);
     }
 
     public JSlider getCoolPixelsPercentage() {

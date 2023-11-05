@@ -141,6 +141,15 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         this.ControlPanel.getTemperatureConfiguration().getHotPixelsPercentage().setValue(this.Viewer.getForegroundImg().getTemperatures().getDTOTemperatureParameters().getHotPixelPercentage());
         this.ControlPanel.getTemperatureConfiguration().getCellsDivider().setValue(this.Viewer.getForegroundImg().getTemperatures().getDTOTemperatureParameters().getCellsDivider());
         this.ControlPanel.getTemperatureConfiguration().getFixAtenuationFactor().setValue(this.Viewer.getForegroundImg().getTemperatures().getDTOTemperatureParameters().getAtenuationFactor());
+
+        int count = 0;
+        for (double number : this.Viewer.getForegroundImg().getTemperatures().getDTOTemperatureParameters().getCellPonderation()){
+            int row = count / 3;
+            int column = count % 3;
+            this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().setValueAt(number, row, column);
+            count++;
+        }
+
     }
 
     @Override
@@ -164,7 +173,12 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
                 DTOTemperatureParameters DTO = new DTOTemperatureParameters(
                         this.ControlPanel.getTemperatureConfiguration().getCoolPixelsPercentage().getValue(),
                         this.ControlPanel.getTemperatureConfiguration().getHotPixelsPercentage().getValue(),
-                        new double[] {1.2D,1.5D,1.2D,0.7D,0.7D,0.7D},
+                        new double[] {(double) this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().getValueAt(0,0),
+                                (double)this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().getValueAt(0,1),
+                                (double) this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().getValueAt(0,2),
+                                (double) this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().getValueAt(1,0),
+                                (double) this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().getValueAt(1,1),
+                                (double) this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().getValueAt(1,2)},
                         (double) this.ControlPanel.getTemperatureConfiguration().getCellsDivider().getValue(),
                         (double) this.ControlPanel.getTemperatureConfiguration().getFixAtenuationFactor().getValue(),
                         this.ControlPanel.getTemperatureConfiguration().getBottonUpTemps().isSelected());
