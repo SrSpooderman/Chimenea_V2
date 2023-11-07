@@ -50,6 +50,10 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         panel.add(this.ControlPanel.getGeneralConfiguration(), c);
         c.gridy = 2;
         panel.add(this.ControlPanel.getTemperatureConfiguration(),c);
+        c.gridx = 2;
+        c.gridy = 0;
+        c.gridheight = 3;
+        panel.add(this.ControlPanel.getPaletteConfiguration(),c);
 
 
 
@@ -149,7 +153,12 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
             this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().setValueAt(number, row, column);
             count++;
         }
-
+        count = 0;
+        for (ColorTarget colorTarget : this.Viewer.getForegroundImg().getPalette().getDtoPaletteParameters().getColorsTarget()){
+            this.ControlPanel.getPaletteConfiguration().getTableColor().getModel().setValueAt(colorTarget.getColor(),count,0);
+            this.ControlPanel.getPaletteConfiguration().getTableColor().getModel().setValueAt(colorTarget.getTemperature(),count,1);
+            count++;
+        }
     }
 
     @Override
@@ -170,7 +179,7 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
                 this.Viewer.getDTOGeneralParameters().setFireXPosition((int) this.ControlPanel.getGeneralConfiguration().getFireXPosition().getValue());
                 this.Viewer.getDTOGeneralParameters().setFireYPosition((int) this.ControlPanel.getGeneralConfiguration().getFireYPosition().getValue());
 
-                DTOTemperatureParameters DTO = new DTOTemperatureParameters(
+                DTOTemperatureParameters DTOTemp = new DTOTemperatureParameters(
                         this.ControlPanel.getTemperatureConfiguration().getCoolPixelsPercentage().getValue(),
                         this.ControlPanel.getTemperatureConfiguration().getHotPixelsPercentage().getValue(),
                         new double[] {(double) this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().getValueAt(0,0),
@@ -182,9 +191,16 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
                         (double) this.ControlPanel.getTemperatureConfiguration().getCellsDivider().getValue(),
                         (double) this.ControlPanel.getTemperatureConfiguration().getFixAtenuationFactor().getValue(),
                         this.ControlPanel.getTemperatureConfiguration().getBottonUpTemps().isSelected());
+                DTOPaletteParameters DTOPalette = new DTOPaletteParameters();
 
+                for (int row = 1; row < 8; row++){
+                    DTOPalette.addColorTarget(new ColorTarget(
+                            (Integer) this.ControlPanel.getPaletteConfiguration().getTableColor().getModel().getValueAt(row,1),
+                            (Color) this.ControlPanel.getPaletteConfiguration().getTableColor().getModel().getValueAt(row,0)
+                    ));
+                }
 
-                this.Viewer.setForegroundImg(new FireModel(DTO,
+                this.Viewer.setForegroundImg(new FireModel(DTOTemp,DTOPalette,
                         (int) this.ControlPanel.getGeneralConfiguration().getFireWidth().getValue(),
                         (int) this.ControlPanel.getGeneralConfiguration().getFireHeight().getValue()));
 

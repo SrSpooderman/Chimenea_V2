@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.File;
 
 import static java.lang.Thread.sleep;
@@ -7,6 +8,7 @@ public class FireController {
     private FireModel FireModel;
     private DTOGeneralParameters DTOGeneralParameters;
     private DTOTemperatureParameters DTOTemperatureParameters;
+    private DTOPaletteParameters DTOPaletteParameters;
 
     public FireController() {
         DTOGeneralParameters = new DTOGeneralParameters(
@@ -24,8 +26,17 @@ public class FireController {
                 1.8D,
                 true);
 
-        this.FireModel = new FireModel(this.DTOTemperatureParameters,this.DTOGeneralParameters.getFireWidth(), this.DTOGeneralParameters.getFireHeight());
-        this.FireView = new FireView(this.DTOGeneralParameters, FireModel);
+        DTOPaletteParameters = new DTOPaletteParameters();
+        DTOPaletteParameters.addColorTarget(new ColorTarget(255,new Color(255,255,255,255)));
+        DTOPaletteParameters.addColorTarget(new ColorTarget(54,new Color(0, 0, 0,100)));
+        DTOPaletteParameters.addColorTarget(new ColorTarget(59,new Color(155, 0, 0,110)));
+        DTOPaletteParameters.addColorTarget(new ColorTarget(72,new Color(200, 100, 0,180)));
+        DTOPaletteParameters.addColorTarget(new ColorTarget(112,new Color(235,235 , 40,250)));
+        DTOPaletteParameters.addColorTarget(new ColorTarget(129,new Color(255, 255, 200,255)));
+        DTOPaletteParameters.addColorTarget(new ColorTarget(149,new Color(255, 255, 255,255)));
+
+        this.FireModel = new FireModel(this.DTOTemperatureParameters,this.DTOPaletteParameters,this.DTOGeneralParameters.getFireWidth(), this.DTOGeneralParameters.getFireHeight());
+        this.FireView = new FireView(this.DTOGeneralParameters,FireModel);
     }
     public void main(){
         FireView.setVisible(true);

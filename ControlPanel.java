@@ -2,14 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ControlPanel extends JPanel {
-    AnimationControls AnimationControls;
-    GeneralConfiguration GeneralConfiguration;
-    TemperatureConfiguration TemperatureConfiguration;
-
+    private AnimationControls AnimationControls;
+    private GeneralConfiguration GeneralConfiguration;
+    private TemperatureConfiguration TemperatureConfiguration;
+    private PaletteConfiguration PaletteConfiguration;
     public ControlPanel() {
         AnimationControls = new AnimationControls();
         GeneralConfiguration = new GeneralConfiguration();
         TemperatureConfiguration = new TemperatureConfiguration();
+        PaletteConfiguration = new PaletteConfiguration();
     }
 
     public AnimationControls getAnimationControls() {
@@ -34,5 +35,13 @@ public class ControlPanel extends JPanel {
 
     public void setTemperatureConfiguration(TemperatureConfiguration temperatureConfiguration) {
         TemperatureConfiguration = temperatureConfiguration;
+    }
+
+    public PaletteConfiguration getPaletteConfiguration() {
+        return PaletteConfiguration;
+    }
+
+    public void setPaletteConfiguration(PaletteConfiguration paletteConfiguration) {
+        PaletteConfiguration = paletteConfiguration;
     }
 }

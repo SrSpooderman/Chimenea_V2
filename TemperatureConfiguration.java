@@ -1,12 +1,8 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 
 public class TemperatureConfiguration extends JPanel {
     private JSlider coolPixelsPercentage;
@@ -41,7 +37,7 @@ public class TemperatureConfiguration extends JPanel {
         DefaultTableModel model = new DefaultTableModel(data, 2) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                return Double.class; // Establecer el tipo de datos de las columnas como Double
+                return Double.class;
             }
         };
         this.cellsPonderation = new JTable(model);

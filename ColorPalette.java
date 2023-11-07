@@ -4,15 +4,11 @@ import java.util.Collections;
 
 public class ColorPalette {
     private ArrayList<ColorTarget> colorsPalette = new ArrayList<ColorTarget>();
-    private ArrayList<ColorTarget> colorsTarget = new ArrayList<ColorTarget>();
+    private DTOPaletteParameters dtoPaletteParameters;
     private int colorDepth;
 
-    public ColorPalette(){
-    }
-
-    public void addColorTarget(ColorTarget Target){
-        this.colorsTarget.add(Target);
-        Collections.sort(this.colorsTarget, (color1, color2) -> Integer.compare(color1.getTemperature(), color2.getTemperature()));
+    public ColorPalette(DTOPaletteParameters dtoPaletteParameters){
+        this.dtoPaletteParameters = dtoPaletteParameters;
     }
 
     public ColorTarget getColor(int temp){
@@ -30,14 +26,6 @@ public class ColorPalette {
 
     public void setColorsPalette(ArrayList<ColorTarget> colorsPalette) {
         this.colorsPalette = colorsPalette;
-    }
-
-    public ArrayList<ColorTarget> getColorsTarget() {
-        return colorsTarget;
-    }
-
-    public void setColorsTarget(ArrayList<ColorTarget> colorsTarget) {
-        this.colorsTarget = colorsTarget;
     }
 
     private ColorTarget calcIntervalColors(ColorTarget first, ColorTarget last, int pasada){
@@ -68,11 +56,10 @@ public class ColorPalette {
     }
 
     public void calc(){
-        colorsPalette.add(colorsTarget.get(0));
 
-        for(int i = 0; i < colorsTarget.size()-1; i++){
-            ColorTarget currentTarget = colorsTarget.get(i);
-            ColorTarget nextTarget = colorsTarget.get(i+1);
+        for(int i = 0; i < this.dtoPaletteParameters.getColorsTarget().size()-1; i++){
+            ColorTarget currentTarget = this.dtoPaletteParameters.getColorsTarget().get(i);
+            ColorTarget nextTarget = this.dtoPaletteParameters.getColorsTarget().get(i+1);
 
             int diff = nextTarget.getTemperature()-currentTarget.getTemperature();
             for (int j = 1; j < diff; j++){
@@ -81,5 +68,13 @@ public class ColorPalette {
             }
             colorsPalette.add(nextTarget);
         }
+    }
+
+    public DTOPaletteParameters getDtoPaletteParameters() {
+        return dtoPaletteParameters;
+    }
+
+    public void setDtoPaletteParameters(DTOPaletteParameters dtoPaletteParameters) {
+        this.dtoPaletteParameters = dtoPaletteParameters;
     }
 }
