@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -50,9 +51,8 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         panel.add(this.ControlPanel.getGeneralConfiguration(), c);
         c.gridy = 2;
         panel.add(this.ControlPanel.getTemperatureConfiguration(),c);
-        c.gridx = 2;
-        c.gridy = 0;
-        c.gridheight = 3;
+        c.gridy = 3;
+        c.gridheight = 2;
         panel.add(this.ControlPanel.getPaletteConfiguration(),c);
 
 
@@ -62,7 +62,7 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
         viewerConstraints.fill = GridBagConstraints.BOTH;
         viewerConstraints.gridx = 1;
         viewerConstraints.gridy = 0;
-        viewerConstraints.gridheight = 3;
+        viewerConstraints.gridheight = 5;
         viewerConstraints.weightx = 1;
         viewerConstraints.weighty = 1;
 
@@ -153,11 +153,10 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
             this.ControlPanel.getTemperatureConfiguration().getCellsPonderation().getModel().setValueAt(number, row, column);
             count++;
         }
-        count = 0;
-        for (ColorTarget colorTarget : this.Viewer.getForegroundImg().getPalette().getDtoPaletteParameters().getColorsTarget()){
-            this.ControlPanel.getPaletteConfiguration().getTableColor().getModel().setValueAt(colorTarget.getColor(),count,0);
-            this.ControlPanel.getPaletteConfiguration().getTableColor().getModel().setValueAt(colorTarget.getTemperature(),count,1);
-            count++;
+        for (int i = 0; i < this.Viewer.getForegroundImg().getPalette().getDtoPaletteParameters().getColorsTarget().size();i++){
+            ColorTarget colorTarget = this.Viewer.getForegroundImg().getPalette().getDtoPaletteParameters().getColorsTarget().get(i);
+            DefaultTableModel model = (DefaultTableModel) this.ControlPanel.getPaletteConfiguration().getTableColor().getModel();
+            model.addRow(new Object[]{(Color)colorTarget.getColor(),(Integer)colorTarget.getTemperature()});
         }
     }
 
@@ -168,6 +167,7 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
             case "Play":
                 this.Viewer.paintBackground();
                 this.Viewer.showBg();
+                this.ControlPanel.getPaletteConfiguration().Clear_Table();
                 defaultTextValues();
                 break;
             case "Stop":
@@ -193,12 +193,14 @@ public class FireView extends JFrame implements ItemListener, ActionListener, Co
                         this.ControlPanel.getTemperatureConfiguration().getBottonUpTemps().isSelected());
                 DTOPaletteParameters DTOPalette = new DTOPaletteParameters();
 
-                for (int row = 1; row < 8; row++){
+                DefaultTableModel model = (DefaultTableModel) this.ControlPanel.getPaletteConfiguration().getTableColor().getModel();
+                for (int row = 0; row < model.getRowCount(); row++){
                     DTOPalette.addColorTarget(new ColorTarget(
                             (Integer) this.ControlPanel.getPaletteConfiguration().getTableColor().getModel().getValueAt(row,1),
                             (Color) this.ControlPanel.getPaletteConfiguration().getTableColor().getModel().getValueAt(row,0)
                     ));
                 }
+                this.ControlPanel.getPaletteConfiguration().Clear_Table();
 
                 this.Viewer.setForegroundImg(new FireModel(DTOTemp,DTOPalette,
                         (int) this.ControlPanel.getGeneralConfiguration().getFireWidth().getValue(),

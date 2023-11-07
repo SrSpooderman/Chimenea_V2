@@ -27,7 +27,6 @@ public class FireController {
                 true);
 
         DTOPaletteParameters = new DTOPaletteParameters();
-        DTOPaletteParameters.addColorTarget(new ColorTarget(255,new Color(255,255,255,255)));
         DTOPaletteParameters.addColorTarget(new ColorTarget(54,new Color(0, 0, 0,100)));
         DTOPaletteParameters.addColorTarget(new ColorTarget(59,new Color(155, 0, 0,110)));
         DTOPaletteParameters.addColorTarget(new ColorTarget(72,new Color(200, 100, 0,180)));
